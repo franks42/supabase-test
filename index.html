@@ -1,0 +1,47 @@
+<html>
+  <head>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+      const { createClient } = supabase
+      const _supabase = createClient('https://cmkmjyiytlrnxppawshd.supabase.co', 
+                                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzOTAwMjgzNiwiZXhwIjoxOTU0NTc4ODM2fQ.YsHl3-6trjTr0izr7AVx97nbZ5na8Fob36weFpp37oI')
+    
+      // console.log('Supabase Instance: ', _supabase)
+
+      // example supabase.js code
+      //   const fetchTodos = async () => {
+      //   let { error, data } = await supabase.from('todos').select().order('id')
+      //   if (error) {
+      //     console.log(error.message)
+      //     return
+      //   }
+      //   setTodos(data)
+      // }
+
+      const fetchCountries = async (iso_code) => {
+        //console.log('fetchCountries')
+        let { data, error } = await _supabase
+                                      .from('countries')
+                                      .select('local_name')
+                                      .eq('iso3',iso_code)
+        if (error) {
+          console.log(error.message)
+          return
+        }
+        console.log('js: ' + data[0].local_name)
+        alert('js: ' + data[0].local_name);
+        //return data
+      }
+
+      fetchCountries('NLD')
+
+    </script>
+
+  </head>
+  <body>
+    HELLO
+  </body>
+</html>
