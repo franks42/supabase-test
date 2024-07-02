@@ -52,7 +52,8 @@
         (get "data" "missing data")
         (first)
         (get "local_name" "missing name")
-        ((fn [p0] (js/console.log (str "scittle/cljs-&: " p0)) p0))))
+        ((fn [p0] (js/console.log (str "scittle/cljs-&: " p0)) p0))
+        ((fn [p0] (js/alert (str "scittle/cljs-&: " p0)) p0))))
 
   (def r (query-f))
 
