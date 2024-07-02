@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.js" type="application/javascript"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js" type="application/javascript"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.reagent.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.re-frame.js"> type="application/javascript"    </script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.promesa.js"> type="application/javascript"    </script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.cljs-ajax.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.pprint.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.17/dist/scittle.nrepl.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script type="application/x-scittle">
+
+(require    '[reagent.core :as r]
+            '[reagent.dom :as rdom]
+            '[re-frame.core :as rf]
+            '[cljs.pprint :as pp]
+            '[ajax.core :refer [GET]]
+            '[promesa.core :as p]
+            )
+  
+(js/console.log "supabase start!")
+                                
+(def create-client js/supabase.createClient)
+(def -supabase (create-client "https://cmkmjyiytlrnxppawshd.supabase.co", 
+                              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzOTAwMjgzNiwiZXhwIjoxOTU0NTc4ODM2fQ.YsHl3-6trjTr0izr7AVx97nbZ5na8Fob36weFpp37oI"))
+
+;(js/console.log "Supabase : ", js/supabase)
+;(js/console.log "Supabase Instance cljs: ", -supabase)
+
+(defn from-select-eq [c f s e0 e1]
+    (-> (.from c f)
+        (.select s)
+        (.eq e0 e1))
+)
+
+  (defn query-f []  
+    (p/-> 
+        (from-select-eq -supabase "countries" "" "iso3" "NLD")
+
+        ;(from-select -supabase "countries" "name")
+        ;(.from -supabase "countries")
+        ;(.select "name")
+
+        ((fn [p0] p0))
+        ;((fn [p0] (js/console.log (str "scittle/cljs-0: " p0)) p0))
+        
+        (js->clj)
+        (get "data" "missing data")
+        (first)
+        (get "local_name" "missing name")
+        ((fn [p0] (js/console.log (str "scittle/cljs-&: " p0)) p0))))
+
+  (def r (query-f))
+
+
+  (js/console.log (str "p-s resolved: \n" (p/resolved? r)))
+  (js/setTimeout  #(js/console.log (str "p-s resolved: \n" (p/resolved? r) "\n"
+                                        "p-s pending:  \n" (p/pending? r)  "\n" 
+                                        "p-s rejected: \n" (p/rejected? r) "\n")
+                                        "result: \n" (p/extract r) "\n"
+                                        ) 
+                  3000)
+
+  (js/console.log "supabase end")
+
+    </script>
+    </head>
+    <body>
+HELLO
+    </body>
+</html>
